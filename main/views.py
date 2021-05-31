@@ -493,7 +493,7 @@ class PasswordResetView(FormView):
 
 # Admin Home View
 class AdminHomeView(AdminRequiredMixin, TemplateView):
-    template_name = "admin/adminhome2.html"
+    template_name = "admin/adminHome2.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -664,6 +664,7 @@ class AdminProductListView(AdminRequiredMixin, ListView):
 class ProductUpdateView(AdminRequiredMixin, UpdateView):
     template_name = "admin/productUpdateForm.html"
     model = Product
+    # form_class = 'form-control'
     fields = [
         "title", "slug", "details", "specs", "category", "brand", "price", "is_featured"
     ]

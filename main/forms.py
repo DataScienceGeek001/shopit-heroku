@@ -13,9 +13,9 @@ class CheckoutForm(forms.ModelForm):
 
 # Customer Registration Form
 class CustomerRegistrationForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
-    email = forms.CharField(widget=forms.EmailInput())
+    username = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs = {'class': 'form-control'}))
+    email = forms.CharField(widget=forms.EmailInput(attrs = {'class': 'form-control'}))
 
     class Meta:
         model = Customer
@@ -31,8 +31,8 @@ class CustomerRegistrationForm(forms.ModelForm):
 
 # Customer Login Form
 class CustomerLoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
+    username = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs = {'class': 'form-control'}))
 
     def clean_username(self):
         uname = self.cleaned_data.get("username")
@@ -86,13 +86,13 @@ class PasswordResetForm(forms.Form):
 
 # Product Add Form
 class ProductAddForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput())
-    slug = forms.CharField(widget=forms.TextInput())
-    details = forms.CharField(widget=forms.Textarea)
-    specs = forms.CharField(widget=forms.Textarea)
+    title = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
+    slug = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
+    details = forms.CharField(widget=forms.Textarea(attrs = {'class': 'form-control'}))
+    specs = forms.CharField(widget=forms.Textarea(attrs = {'class': 'form-control'}))
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
     brand = forms.ModelChoiceField(queryset=Brand.objects.all(), required=True)
-    price = forms.IntegerField(widget=forms.NumberInput())
+    price = forms.IntegerField(widget=forms.NumberInput(attrs = {'class': 'form-control'}))
     is_featured = forms.BooleanField(required=False,initial=False,label='Featured')
 
     class Meta:
@@ -114,7 +114,7 @@ class ProductAttributeForm(forms.ModelForm):
 
 # Brand Add Form
 class BrandAddForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput())
+    title = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
     image = forms.FileField()
 
     class Meta:
@@ -123,7 +123,7 @@ class BrandAddForm(forms.ModelForm):
 
 # Category Add Form
 class CategoryAddForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput())
+    title = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
     image = forms.FileField()
 
     class Meta:
@@ -132,8 +132,8 @@ class CategoryAddForm(forms.ModelForm):
 
 # Color Add Form
 class ColorAddForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput())
-    color_code = forms.CharField(widget=forms.TextInput())
+    title = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
+    color_code = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
 
     class Meta:
         model = Color
@@ -141,7 +141,7 @@ class ColorAddForm(forms.ModelForm):
 
 # Size Add Form
 class SizeAddForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput())
+    title = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
 
     class Meta:
         model = Size
