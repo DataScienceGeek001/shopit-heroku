@@ -31,6 +31,9 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from .main_serializer import ProductSerializer
 
+from django.template.loader import get_template
+from django.core.mail import EmailMessage
+
 ''' ''' ''' REST FRAMEWORK ''' ''' '''
 
 # Displaying data using REST Framework
@@ -156,11 +159,9 @@ def filter_data(request):
 
 # Add to Cart View
 @method_decorator(login_required(login_url="/login/"), name='dispatch')
-class AddToCartView(EcomMixin, TemplateView):
-    template_name = "cart/addtocart.html"
+class AddToCartView(EcomMixin, View):
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
         # get product id from requested url
         product_id = self.kwargs['pro_id']
         # get product
@@ -168,7 +169,7 @@ class AddToCartView(EcomMixin, TemplateView):
         # print(product_obj.price)
         # check if cart exists
         cart_id = self.request.session.get("cart_id", None)
-        print(cart_id)
+        # print(cart_id)
         if cart_id:
             cart_obj = Cart.objects.get(id=cart_id)
             this_product_in_cart = cart_obj.cartproduct_set.filter(
@@ -200,7 +201,7 @@ class AddToCartView(EcomMixin, TemplateView):
             cart_obj.save()
             messages.success(self.request, 'Product Added to cart successfully!')
 
-        return context
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 # Cart View
@@ -298,6 +299,20 @@ class CheckoutView(EcomMixin, CreateView):
             del self.request.session['cart_id']
             pm = form.cleaned_data.get("payment_method")
             order = form.save()
+            order_obj = Order.objects.get(cart=cart_obj)
+            products = order_obj.cart.cartproduct_set.all()
+            message = get_template('cart/order_conf_mail.html').render({
+                    'order': order_obj,
+                    'products': products
+                })
+            mail = EmailMessage(
+                f'ShopIT - {order_obj.order_status} - Order #{order_obj.id}',
+                message,
+                'hpneosft@gmail.com',
+                [order_obj.email]
+            )
+            mail.content_subtype = "html"
+            mail.send()
             if pm == "Razorpay":
                 return redirect(reverse("razorpayrequest") + "?o_id=" + str(order.id))
 
@@ -412,10 +427,12 @@ def add_to_favourite(request, id):
     # print(id)
     product = get_object_or_404(Product, id=id)
     if product.favorite.filter(id=request.user.customer.id).exists():
-        print(request.user.customer)
+        # print(request.user.customer)
         product.favorite.remove(request.user.customer)
+        messages.success(request, 'Product Removed from your favorites!')
     else:
         product.favorite.add(request.user.customer)
+        messages.success(request, 'Product added to favorites!')
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 # Customer Password Forgot View
