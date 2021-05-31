@@ -21,13 +21,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '+2*y%tvkr_#ur1ugmff9bs-88jf&gu+!n5e^p)0lgqrsqx552='
+SECRET_KEY = os.environ.get('SECRET_KEY', '+2*y%tvkr_#ur1ugmff9bs-88jf&gu+!n5e^p)0lgqrsqx552=')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
 
 # ALLOWED_HOSTS = ['shopit-djangoapp.herokuapp.com']
-ALLOWED_HOSTS = ['stark-ocean-80244.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['stark-ocean-80244.herokuapp.com', '127.0.0.1', '*']
 
 # Application definition
 
@@ -90,12 +91,12 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -108,16 +109,16 @@ DATABASES = {
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'ecomdbpg',
-#         'USER': 'ecom',
-#         'PASSWORD': 'ecom123',
-#         'HOST': 'localhost',
-#         'POST': '',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ecomdbpg',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres123',
+        'HOST': 'localhost',
+        'POST': '',
+    }
+}
 
 
 # Password validation
