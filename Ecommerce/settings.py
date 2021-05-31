@@ -27,7 +27,7 @@ SECRET_KEY = '+2*y%tvkr_#ur1ugmff9bs-88jf&gu+!n5e^p)0lgqrsqx552='
 DEBUG = True
 
 # ALLOWED_HOSTS = ['shopit-djangoapp.herokuapp.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['stark-ocean-80244.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
