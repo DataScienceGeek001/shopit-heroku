@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Font Awesome -->
+	<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free/css/all.min.css' %}" />
+	<!-- Bootstrap 4 CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static 'bs4/bootstrap.min.css' %}" />
+	<!-- Main Jquery -->
+	<script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
+	<!-- Bootstrap 4 JS -->
+	<script type="text/javascript" src="{% static 'bs4/bootstrap.min.js' %}"></script>
+
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
+        
+        .sidebar {
+            height: 100%;
+            width: 77px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 40px;
+            white-space: nowrap;
+        }
+        
+        .sidebar a {
+            padding: 4px 8px 4px 32px;
+            text-decoration: none;
+            font-size: 17px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+        
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+        
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        
+        .material-icons,
+        .icon-text {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        
+        .material-icons {
+            padding-bottom: 3px;
+        }
+        
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+            margin-left: 100px;
+        }
+        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        
+        @media screen and (max-height: 450px) {
+            .sidebar {
+                padding-top: 15px;
+            }
+            .sidebar a {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
+        <a href="{% url 'adminhome' %}"><span><i class="material-icons">admin_panel_settings</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Dashboard</span></a><br>
+        <a href="{% url 'adminProductList' %}"><i class="material-icons">inventory_2</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Products</a></span></a><br>
+        <a href="{% url 'adminBrandList' %}"><i class="material-icons">storefront</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Brands</span></a><br>
+        <a href="{% url 'adminCategoryList' %}"><i class="material-icons">category</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Category</span></a><br>
+        <a href="{% url 'adminColorList' %}"><i class="material-icons">color_lens</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Color</span></a><br>
+        <a href="{% url 'adminSizeList' %}"><i class="material-icons">zoom_in</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Size</span></a><br>
+        <a href="{% url 'adminUserList' %}"><i class="material-icons">people</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Users</span></a><br>                
+        <a href="{% url 'adminOrderList' %}"><i class="material-icons">receipt</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Orders</span></a><br>
+        <a href="{% url 'home' %}" target="_blankss"><i class="material-icons">launch</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Visit Site</span></a><br>
+        <a href="{% url 'customerlogout' %}"><i class="material-icons">logout</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;Logout</span></a><br>
+   </div>
+
+    <div id="main">
+        {% block content %}
+    {% endblock %}
+    </div>
+
+    <script>
+        var mini = true;
+
+        function toggleSidebar() {
+            if (mini) {
+                console.log("opening sidebar");
+                document.getElementById("mySidebar").style.width = "250px";
+                document.getElementById("main").style.marginLeft = "250px";
+                this.mini = false;
+            } else {
+                console.log("closing sidebar");
+                document.getElementById("mySidebar").style.width = "77px";
+                document.getElementById("main").style.marginLeft = "77px";
+                this.mini = true;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+{% extends 'admin/adminbase3.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col-md-10">
+        <br />
+            <div style="float: left;">
+                <h3>Color List</h3>
+            </div>
+            <div style="float: right;"><a href="{% url 'addColor' %}" class="btn btn-success btn-sm">Add Color</a></div>
+            <br />
+        <hr class="mt-4">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>SN</th>
+                    <th>Title</th>
+                    <th>Color_Code</th>
+                    <th>Color</th>
+                    <th style="text-align:center" >Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for color in colors %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{color.title}}</td>
+                    <td>{{color.color_code}}</td>
+                    <td><span class="btn btn-lg" style="background-color: {{color.color_code}}"></span></td>
+                    <td style="text-align:center"><a href="{% url 'colorUpdate' color.id %}" class="btn btn-warning mr-2 btn-sm"> EDIT </a>
+                        <a href="{% url 'deletecolor' color.id %}" onclick="return confirm('Are you sure you want to delete this color?')"
+                            class="btn btn-danger btn-sm"> DELETE </a>
+                        </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

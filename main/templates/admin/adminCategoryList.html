@@ -1,0 +1,39 @@
+{% extends 'admin/adminbase3.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="row">
+    <div class="col-md-10">
+        <br />
+            <div style="float: left;">
+                <h3>Category List</h3>
+            </div>
+            <div style="float: right;"><a href="{% url 'addCategory' %}" class="btn btn-success btn-sm">Add Category</a></div>
+            <br />
+        <hr class="mt-4">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>SN</th>
+                    <th>Title</th>
+                    <th>Image</th>
+                    <th style="text-align:center" >Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categorys %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{category.title}}</td>
+                    <td><img src="/media/{{category.image}}" height="50px" width="50px"></td>
+                    <td style="text-align:center"><a href="{% url 'categoryUpdate' category.id %}" class="btn btn-warning mr-2 btn-sm"> EDIT </a>
+                        <a href="{% url 'deletecategory' category.id %}" onclick="return confirm('Are you sure you want to delete this category?')"
+                            class="btn btn-danger btn-sm"> DELETE </a>
+                        </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

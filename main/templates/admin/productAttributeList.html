@@ -1,0 +1,44 @@
+{% extends 'admin/adminbase3.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <br />
+            <div style="float: left;">
+                <h3>Product Attribute List</h3>
+            </div>
+            <div style="float: right;"><a href="{% url 'adminProductList' %}" class="btn btn-success btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Go Back</a></div>
+            <br />
+        <hr class="mt-4">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>SN</th>
+                    <th>Name</th>
+                    <th>Color</th>
+                    <th>Size</th>
+                    <th>image</th>
+                    <th style="text-align:center" >Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prod_attr in prodAttr %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{prod_attr.product.title}}</a></td>
+                    <td>{{prod_attr.color.color_code}}</td>
+                    <td>{{prod_attr.size.title}}</td>
+                    <td><img src="/media/{{prod_attr.image}}" height="50px" width="50px"></td>
+                    <td style="text-align:center" ><a href="{% url 'pattrUpdate' prod_attr.id %}" class="btn btn-warning mr-2 btn-sm"> EDIT </a>
+                        <a href="{% url 'deletepattr' prod_attr.id %}"
+                            onclick="return confirm('Are you sure you want to delete this product attribute?')"
+                            class="btn btn-danger btn-sm"> DELETE </a>
+                        </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

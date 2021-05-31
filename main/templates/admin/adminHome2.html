@@ -1,0 +1,76 @@
+{% extends 'admin/adminbase3.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} ShopIT Admin-Panel {% endblock %}
+{% block content %}
+<div class="row">
+<div class="col main pt-5 mt-3">
+    <h1 class="display-4 d-none d-sm-block">
+            Admin Dashboard
+            </h1>
+            <div class="row mb-3">
+                <div class="col-xl-6 col-sm-6 py-2">
+                    <div class="card bg-success text-white text-center h-100">
+                        <div class="card-body bg-success">
+                                <i class="fa fa-user fa-4x"></i>
+                            <h4 class="text-uppercase">Users</h4>
+                            <h1 class="display-4">{{customers.all.count}}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 py-2">
+                    <div class="card text-white bg-danger text-center h-100">
+                        <div class="card-body bg-danger">
+                                <i class="fa fa-list fa-4x"></i>
+                            <h4 class="text-uppercase">Products</h4>
+                            <h1 class="display-4">{{products.all.count}}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 py-2">
+                    <div class="card text-white bg-info h-100">
+                        <div class="card-body bg-info">
+                            <div class="rotate">
+                                <i class="fa fa-twitter fa-4x"></i>
+                            </div>
+                            <h6 class="text-uppercase">Brands</h6>
+                            <h1 class="display-4">{{brands.all.count}}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 py-2">
+                    <div class="card text-white bg-warning h-100">
+                        <div class="card-body">
+                            <div class="rotate">
+                                <i class="fa fa-share fa-4x"></i>
+                            </div>
+                            <h6 class="text-uppercase">Categorys</h6>
+                            <h1 class="display-4">{{categorys.all.count}}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 py-2">
+                    <div class="card text-white bg-info h-100">
+                        <div class="card-body bg-info">
+                            <div class="rotate">
+                                <i class="fa fa-twitter fa-4x"></i>
+                            </div>
+                            <h6 class="text-uppercase">Orders</h6>
+                            <h1 class="display-4">{{orders.all.count}}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 py-2">
+                    <div class="card text-white bg-info h-100">
+                        <div class="card-body bg-info">
+                            <div class="rotate">
+                                <i class="fa fa-twitter fa-4x"></i>
+                            </div>
+                            <h6 class="text-uppercase">Pending Orders</h6>
+                            <h1 class="display-4">{{pendingorders.all.count}}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

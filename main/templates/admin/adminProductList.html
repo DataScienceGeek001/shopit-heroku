@@ -1,0 +1,50 @@
+{% extends 'admin/adminbase3.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <br />
+            <div style="float: left;">
+                <h3>Product List</h3>
+            </div>
+            <div style="float: right;"><a href="{% url 'addProductAttribute' %}" class="btn btn-success btn-sm">Add Product Attributes</a></div>
+            <div style="float: right;"><a href="{% url 'addProduct' %}" class="btn btn-success btn-sm mr-3">Add Product</a></div>
+            <br />
+        <hr class="mt-4">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>SN</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Color</th>
+                    <th>Price</th>
+                    <th style="text-align:center" >Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td><a href="{% url 'product-detail' slug=product.slug id=product.id %}"
+                            target="_blank">{{product.title}}</a></td>
+                    <td>{{product.category}}</td>
+                    <td>{{product.brand}}</td>
+                    <td>{{product.productattribute_set.first.color}}</td>
+                    <td>Rs. {{product.price|intcomma}}</td>
+                    <td style="text-align:center" ><a href="{% url 'productUpdate' product.id %}" class="btn btn-warning mr-2 btn-sm"> EDIT </a>
+                        <a href="{% url 'deleteproduct' product.id %}"
+                            onclick="return confirm('Are you sure you want to delete this product?')"
+                            class="btn btn-danger btn-sm mr-2"> DELETE </a>
+                        <a href="{% url 'adminPattr' product.id %}" class="btn btn-info mr-2 btn-sm"> Attributes </a>
+                        </td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

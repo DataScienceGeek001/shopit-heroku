@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout {% endblock %}
+{% load crispy_forms_tags %}
+{% load mathfilters %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="mt-5 mb-4">Items in the cart</h3>
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>SN</th>
+                        <th>Product</th>
+                        <th>Rate</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in cart.cartproduct_set.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{cp.product.title}}</td>
+                        <td>{{cp.rate}}</td>
+                        <td>{{cp.quantity}}</td>
+                        <td>{{cp.subtotal}}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="3"><a href="{% url 'mycart' %}" class="btn btn-success">Update Cart</a></th>
+                        <th class="text-right">Total</th>
+                        <th>Rs. {{cart.total}}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6 mt-5 mb-4">
+            <h3>Checkout Form</h3>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{form|crispy}}
+                <br/>
+                <button class="btn btn-info">Place order</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

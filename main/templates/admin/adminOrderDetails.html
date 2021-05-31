@@ -1,0 +1,67 @@
+{% extends "admin/adminbase3.html" %}
+
+{% load static %}
+
+{% load humanize %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <br />
+            <div style="float: left;">
+                <h3>Order Details</h3>
+            </div>
+            <div style="float: right;"><a href="{% url 'adminOrderList' %}" class="btn btn-success btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Go Back</a></div>
+            <br />
+        <hr class="mt-4">
+            <p><span class="font-weight-bold">Order ID: </span> #ORDER_{{order.id}}</p>
+            <p><span class="font-weight-bold">Order Status: </span> {{order.order_status}}</p>
+            <p><span class="font-weight-bold">Order On: </span> {{order.created_at}}({{order.created_at|timesince}} ago)</p>
+            <p><span class="font-weight-bold">Customer Information: </span> By {{order.ordered_by}}, {{order.mobile}}</p>
+            <p><span class="font-weight-bold">Shipping Address: </span> By {{order.shipping_address}} ({{order.email}})</p>
+            <h4>Ordered Items</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Item</th>
+                        <th>Rate</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in order.cart.cartproduct_set.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a target="_blank"
+                                href="">{{cp.product.title}}({{cp.product.id}})</a>
+                        </td>
+                        <td>{{cp.rate}}</td>
+                        <td>{{cp.quantity}}</td>
+                        <td>{{cp.subtotal}}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4" class="text-right">Total: </th>
+                        <th>Rs {{order.total|intcomma}}/-</th>
+                    </tr>
+                </tbody>
+            </table>
+            <form action="{% url 'adminOrderStatusChange' order.id %}" method="POST">
+                {% csrf_token %}
+                <select name="status">
+                    {% for i, j in statuses %}
+                    <option value="{{i}}" {% if i == order.order_status %}selected{% endif %}>{{j}}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-info btn-sm">Change</button>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

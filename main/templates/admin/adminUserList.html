@@ -1,0 +1,43 @@
+{% extends 'admin/adminbase3.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="row">
+    <div class="col-md-10">
+        <br />
+            <div style="float: left;">
+                <h3>Customer List</h3>
+            </div>
+            <div style="float: right;"><a href="{% url 'addCustomer' %}" class="btn btn-success btn-sm">Add Customer</a></div>
+            <br />
+        <hr class="mt-4">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>SN</th>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Address</th>
+                    <th>Joined on</th>
+                    <th style="text-align:center" >Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{customer.user.username}}</td>
+                    <td>{{customer.full_name}}</td>
+                    <td>{{customer.address}}</td>
+                    <td>{{customer.joined_on}}</td>
+                    <td style="text-align:center" ><a href="{% url 'userUpdate' customer.id %}" class="btn btn-warning mr-2 btn-sm"> EDIT </a>
+                        <a href="{% url 'deletecustomer' customer.user.id %}" onclick="return confirm('Are you sure you want to delete this User?')"
+                            class="btn btn-danger btn-sm"> DELETE </a>
+                        </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

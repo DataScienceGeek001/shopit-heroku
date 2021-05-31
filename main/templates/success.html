@@ -1,0 +1,30 @@
+{% load static %}
+{% block content %}
+
+<head>
+    <style>
+        .center {
+            position: absolute;
+            text-align: center;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free/css/all.min.css' %}" />
+</head>
+
+<body>
+    <div class="center">
+        <h2>
+            Thank you for Shopping with us! <i class="far fa-check-circle"></i>
+        </h2>
+        <h5>
+            <a href="{% url 'home' %}">
+                Go to Home Page
+            </a>
+        </h5>
+    </div> 
+</body>
+
+{% endblock content %}
