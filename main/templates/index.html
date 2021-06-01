@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 <!-- Home Slider -->
+<div class="container">
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         {% for banner in banners %}
@@ -33,6 +34,8 @@
         </a>
     </div>
 </div>
+</div>
+</div>
 <main class="container my-4">
     <!-- Featured Products -->
             <div style="float: left;">
@@ -43,16 +46,16 @@
         <hr class="mt-4">
     <div class="row">
         {% for product in data %}
-        <div class="col-md-3 mb-4">
-            <div class="card shadow">
-                <a href="/product/{{product.slug}}/{{product.id}}"><img src="/media/{{product.productattribute_set.first.image}}" class="card-img-top" alt="{{product.title}}"></a>
+        <div class="col-md-2 mb-4 mr-3 ml-3">
+            <div class="card shadow" style="width: 12.8em;">
+                <a href="/product/{{product.slug}}/{{product.id}}"><img src="/media/{{product.productattribute_set.first.image}}" class="card-img-top" style="width: 190px; height: 190px;" alt="{{product.title}}"></a>
                 <div class="card-body">
-                    <h5 class="card-text"><a href="/product/{{product.slug}}/{{product.id}}">{{product.title}}</a></h5>
+                    <h6 class="card-text"><a href="/product/{{product.slug}}/{{product.id}}">{{product.title}}</a></h6>
                     <h6>Rs. {{product.price}}</h6>
                 </div>
                 <div class="card-footer">
-                    <a href = "{% url 'addtocart' product.id %}"><button class="btn btn-sm btn-primary" ><i class="fa fa-shopping-cart"></i></button></a>
-                    <a href = "{% url 'addToFavourite' product.id %}"><button class="btn btn-sm btn-danger"><i class="fa fa-heart"></i></button></a>
+                    <a href = "{% url 'addtocart' product.id %}"><button class="btn btn-sm btn-primary" ><i class="fa fa-shopping-cart fa-sm"></i></button></a>
+                    <a href = "{% url 'addToFavourite' product.id %}"><button class="btn btn-sm btn-danger"><i class="fa fa-heart fa-sm"></i></button></a>
                     <span class="float-right">
                         4.5/5
                         <i class="fa fa-star text-warning"></i>

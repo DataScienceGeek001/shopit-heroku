@@ -64,6 +64,7 @@ class EcomMixin(object):
             if request.user.is_authenticated and request.user.customer:
                 cart_obj.customer = request.user.customer
                 cart_obj.save()
+                # return redirect('/')
         return super().dispatch(request, *args, **kwargs)
 
 # Mixin for Admin authentication
@@ -158,9 +159,16 @@ def filter_data(request):
 ''' ''' ''' CART VIEWS  ''' ''' '''
 
 # Add to Cart View
-@method_decorator(login_required(login_url="/login/"), name='dispatch')
+# @method_decorator(login_required(login_url="/login/"), name='dispatch')
 class AddToCartView(EcomMixin, View):
     
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.customer:
+            pass
+        else:
+            return redirect("/login/")
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         # get product id from requested url
         product_id = self.kwargs['pro_id']
@@ -211,7 +219,17 @@ class MyCartView(EcomMixin, TemplateView):
     # @login_required(login_url='/login')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_id = self.request.session.get("cart_id", None)
+        user = self.request.user.customer
+        cust = Customer.objects.get(id=user.id)
+        print(cust)
+        cart_obj = Cart.objects.filter(customer=cust).all()
+        print(cart_obj.last())
+        last_cart = cart_obj.last()
+        # cart_id = self.request.session.get("cart_id", None)
+        if last_cart is not None:
+            cart_id =  last_cart.id
+        else:
+            cart_id = self.request.session.get("cart_id", None)
         if cart_id:
             cart = Cart.objects.get(id=cart_id)
         else:
@@ -254,12 +272,18 @@ class ManageCartView(EcomMixin, View):
 # Empty Cart View
 class EmptyCartView(EcomMixin, View):
     def get(self, request, *args, **kwargs):
-        cart_id = request.session.get("cart_id", None)
+        cust = Customer.objects.get(id=self.request.user.customer.id)
+        cart_obj = Cart.objects.filter(customer=cust).last()
+        cart_id =  cart_obj.id
+        # cart_id = request.session.get("cart_id", None)
         if cart_id:
             cart = Cart.objects.get(id=cart_id)
-            cart.cartproduct_set.all().delete()
+            cp_obj = CartProduct.objects.filter(cart=cart)
+            print(cp_obj)
             cart.total = 0
             cart.save()
+            cp_obj.delete()
+            
         return redirect("mycart")
 
 # Cart Checkout View
@@ -278,7 +302,10 @@ class CheckoutView(EcomMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_id = self.request.session.get("cart_id", None)
+        cust = Customer.objects.get(id=self.request.user.customer.id)
+        cart_obj = Cart.objects.filter(customer=cust).last()
+        cart_id =  cart_obj.id
+        # cart_id = self.request.session.get("cart_id", None)
         if cart_id:
             cart_obj = Cart.objects.get(id=cart_id)
         else:
@@ -288,7 +315,10 @@ class CheckoutView(EcomMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        cart_id = self.request.session.get("cart_id")
+        cust = Customer.objects.get(id=self.request.user.customer.id)
+        cart_obj = Cart.objects.filter(customer=cust).last()
+        cart_id =  cart_obj.id
+        # cart_id = self.request.session.get("cart_id")
         if cart_id:
             cart_obj = Cart.objects.get(id=cart_id)
             form.instance.cart = cart_obj
@@ -296,7 +326,8 @@ class CheckoutView(EcomMixin, CreateView):
             form.instance.discount = 0
             form.instance.total = cart_obj.total
             form.instance.order_status = "Order Received"
-            del self.request.session['cart_id']
+            # del self.request.session['cart_id']
+            
             pm = form.cleaned_data.get("payment_method")
             order = form.save()
             order_obj = Order.objects.get(cart=cart_obj)
@@ -313,6 +344,13 @@ class CheckoutView(EcomMixin, CreateView):
             )
             mail.content_subtype = "html"
             mail.send()
+            if cart_id:
+                cart = Cart.objects.get(id=cart_id)
+                cp_obj = CartProduct.objects.filter(cart=cart)
+                print(cp_obj)
+                cart.total = 0
+                cart.save()
+                cp_obj.delete()
             if pm == "Razorpay":
                 return redirect(reverse("razorpayrequest") + "?o_id=" + str(order.id))
 
@@ -345,7 +383,7 @@ def success(request):
 
 # Customer Registration View
 class CustomerRegistrationView(EcomMixin, CreateView):
-    template_name = "customer/customerregistration.html"
+    template_name = "customer/new_register.html"
     form_class = CustomerRegistrationForm
     success_url = reverse_lazy("home")
 
@@ -373,22 +411,28 @@ class CustomerLogoutView(EcomMixin, View):
 
 # Customer Login View
 class CustomerLoginView(EcomMixin, FormView):
-    template_name = "customer/customerlogin.html"
+    template_name = "customer/new_login.html"
     form_class = CustomerLoginForm
-    success_url = reverse_lazy("home")
+    success_url = '/'
 
     def form_valid(self, form):
         uname = form.cleaned_data.get("username")
         pword = form.cleaned_data["password"]
         usr = authenticate(username=uname, password=pword)
         if usr is None:
+            messages.error(self.request, "Invalid Credentials, Please Try Again")
             return render(self.request, self.template_name, {"form": self.form_class, "error": "Invalid credentials"})
+            
         if usr.is_superuser:
             login(self.request, usr)
             return redirect("adminhome")
+
         if usr is not None and Customer.objects.filter(user=usr).exists():
+            messages.success(self.request, "You are logged in successfully!")
             login(self.request, usr)
+            
         else:
+            messages.error(self.request, "Invalid Credentials, Please Try Again")
             return render(self.request, self.template_name, {"form": self.form_class, "error": "Invalid credentials"})
 
         return super().form_valid(form)

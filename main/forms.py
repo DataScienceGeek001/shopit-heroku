@@ -13,9 +13,22 @@ class CheckoutForm(forms.ModelForm):
 
 # Customer Registration Form
 class CustomerRegistrationForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput(attrs = {'class': 'form-control'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs = {'class': 'form-control'}))
-    email = forms.CharField(widget=forms.EmailInput(attrs = {'class': 'form-control'}))
+    username = forms.CharField(widget=forms.TextInput(attrs = { 
+        'placeholder': "User Name",
+        'autofocus': 'autofocus'
+        }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs = { 
+        'placeholder': "Password",
+    }))
+    email = forms.CharField(widget=forms.EmailInput(attrs = { 
+        'placeholder': "Email",
+    }))
+    full_name = forms.CharField(widget=forms.TextInput(attrs = { 
+        'placeholder': "Full Name",
+    }))
+    address = forms.CharField(widget=forms.TextInput(attrs = { 
+        'placeholder': "Address",
+    }))
 
     class Meta:
         model = Customer
